@@ -8,18 +8,6 @@ use App\Http\Controllers\Controller;
 
 class GameController extends Controller
 {
-    //Get all users for game
-    public function GetAllUsers(){
-        $users  = User::where('id', '!=', auth()->id())->get();
-
-        return $users
-            ->makeHidden('email')
-            ->makeHidden('email_verified_at')
-            ->makeHidden('created_at')
-            ->makeHidden('updated_at')
-            ->toArray();
-    }
-
     //Initialize the game
     public function StartGame(Request $request){
 

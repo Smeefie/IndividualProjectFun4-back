@@ -23,6 +23,11 @@ Route::post('/Register', 'Api\AuthController@Register');
 Route::post('/Login', 'Api\AuthController@Login');
 Route::get('/Logout', 'Api\AuthController@Logout');
 
+//USERS
+Route::get('/GetAllUsers', 'Api\UserController@GetAllUsers');
+Route::get('/GetUserById', 'Api\UserController@GetUserById');
+Route::get('/GetUserByEmail', 'Api\UserController@GetUserByEmail');
+
 //GAME
-Route::get('GetAllUsers', 'Api\GameController@GetAllUsers');
-Route::post('StartGame', 'Api\GameController@StartGame');
+Route::post('/StartGame', 'Api\GameController@StartGame');
+
