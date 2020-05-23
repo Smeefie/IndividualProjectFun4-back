@@ -62,6 +62,13 @@ class UserController extends Controller
         return $friendArray;
     }
 
+    public function GetFriendRequest(Request $request){
+        return Friendship::where('requester', '=', $request['id'])
+                ->where('userRequested', '=',  $request['friendId'])
+                ->first()
+                ->toArray();
+    }
+
     public function AddFriend(Request $request){
         if (!Friendship::where('requester', '=', $request['id'])
             ->where('userRequested', '=',  $request['friendId'])

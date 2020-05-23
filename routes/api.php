@@ -37,6 +37,7 @@ Route::post('/RemoveFriend', 'Api\UserController@RemoveFriend');
 Route::post('/GetAllUsersNotFriends', 'Api\UserController@GetAllUsersNotFriends');
 Route::post('/GetAllFriends', 'Api\UserController@GetAllFriends');
 Route::post('/GetAllFriendRequests', 'Api\UserController@GetAllFriendRequests');
+Route::post('/GetFriendRequest', 'Api\UserController@GetFriendRequest');
 
 //GAME
 Route::post('/StartGame', 'Api\GameController@StartGame');
