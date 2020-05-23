@@ -63,19 +63,40 @@ class UserController extends Controller
     }
 
     public function AddFriend(Request $request){
-
         if (!Friendship::where('requester', '=', $request['id'])
             ->where('userRequested', '=',  $request['friendId'])
             ->exists()) {
+
+
+            if (!Friendship::where('userRequested', '=', $request['id'])
+                ->where('requester', '=',  $request['friendId'])
+                ->exists()) {
+
+                $friendship = Friendship::create([
+                    'requester' => $request['id'],
+                    'userRequested' => $request['friendId']
+                ]);
             
-            $friendship = Friendship::create([
-                'requester' => $request['id'],
-                'userRequested' => $request['friendId']
-            ]);
-        
-            if($friendship){
+                if($friendship){
+                    return response()->json($friendship, 200);
+                };    
+            }  
+            else{
+                $friendship = Friendship::create([
+                    'requester' => $request['id'],
+                    'userRequested' => $request['friendId'],
+                    'status' => 1
+                ]);
+
+                $friendshipReverse = Friendship::where('userRequested', '=', $request['id'])
+                                ->where('requester', '=',  $request['friendId'])
+                                ->first()
+                                ->update([
+                                    'status' => 1
+                                ]);
+
                 return response()->json($friendship, 200);
-            };                 
+            }           
          }
 
          return response()->json('Already Added', 501);         
@@ -92,6 +113,16 @@ class UserController extends Controller
             ]);
 
             if($friendship){
+                if (!Friendship::where('requester', '=', $request['id'])
+                    ->where('userRequested', '=',  $request['friendId'])
+                    ->exists()) {
+                
+                    $friendship = Friendship::create([
+                        'requester' => $request['id'],
+                        'userRequested' => $request['friendId'],
+                        'status' => 1
+                    ]); 
+                }
                 return response()->json($friendship, 200);
              };
         }      
@@ -99,19 +130,44 @@ class UserController extends Controller
         return response()->json('Failed', 501);
     }
 
-    public function RemoveFriend(Request $request){
-        $friendship = Friendship::where('requester', $request['id'])
-            ->where('userRequested', $request['friendId'])
+    public function DeclineFriend(Request $request){
+        $friendship = Friendship::where('userRequested', $request['id'])
+            ->where('requester', $request['friendId'])
             ->first();
 
         if($friendship){
             $friendship->delete();
-    
-            if($friendship){
-                return response()->json($friendship, 200);
-            };
+        }
+    }
+
+    public function RemoveFriend(Request $request){
+        $friendship = Friendship::where('requester', '=', $request['id'])
+            ->where('userRequested', '=',  $request['friendId'])
+            ->first();
+
+        $friendshipReverse = Friendship::where('userRequested', '=', $request['id'])
+            ->where('requester', '=',  $request['friendId'])
+            ->first();
+
+        if($friendship){
+            $friendship->delete();
+
+            if($friendshipReverse){
+                $friendshipReverse->delete();
+            } 
+
+            if($friendship) return response()->json($friendship, 200);
         } 
 
         return response()->json('Failed', 501);
+    }
+
+    public function GetAllFriendRequests(Request $request){
+        $friendship =  Friendship::where('userRequested', '=', $request['id'])
+            ->where('status', '=', 0)
+            ->get()
+            ->toArray();    
+            
+        return response($friendship, 200);
     }
 }

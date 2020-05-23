@@ -32,10 +32,11 @@ Route::post('/GetUserByEmail', 'Api\UserController@GetUserByEmail');
 //FRIENDS
 Route::post('/AddFriend', 'Api\UserController@AddFriend');
 Route::post('/AcceptFriend', 'Api\UserController@AcceptFriend');
+Route::post('/DeclineFriend', 'Api\UserController@DeclineFriend');
 Route::post('/RemoveFriend', 'Api\UserController@RemoveFriend');
 Route::post('/GetAllUsersNotFriends', 'Api\UserController@GetAllUsersNotFriends');
 Route::post('/GetAllFriends', 'Api\UserController@GetAllFriends');
-
+Route::post('/GetAllFriendRequests', 'Api\UserController@GetAllFriendRequests');
 
 //GAME
 Route::post('/StartGame', 'Api\GameController@StartGame');
