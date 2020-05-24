@@ -40,5 +40,9 @@ Route::post('/GetAllFriendRequests', 'Api\UserController@GetAllFriendRequests');
 Route::post('/GetFriendRequest', 'Api\UserController@GetFriendRequest');
 
 //GAME
-Route::post('/StartGame', 'Api\GameController@StartGame');
+Route::post('/CreateGame', 'Api\GameController@CreateGame');
+Route::post('/GetAllGamePlayers', 'Api\GameController@GetAllGamePlayers');
+Route::post('/GetGameInfo', 'Api\GameController@GetGameInfo');
+Route::post('/CheckIfGameExists', 'Api\GameController@CheckIfGameExists');
+Route::post('/GetGameStatus', 'Api\GameController@GetGameStatus');
 
