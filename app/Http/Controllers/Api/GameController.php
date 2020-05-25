@@ -59,7 +59,26 @@ class GameController extends Controller
         return ['players' => $gamePlayers, 'info' => $gameInfo];
     }
 
-    public function StopGame(Request $request){
+    public function UpdateGame(Request $request){
+        $game = Game::where('gameId', '=', $request['gameId'])->first();
+        $game->update([
+            'status' => $request['status'],
+            'round' => $request['round']
+        ]);
 
+        foreach($request['players'] as $player){
+            $gamePlayer = GamePlayer::where('gameId', '=', $request['gameId'])
+                ->where('userId', '=', $player['id'])
+                ->first();
+
+            if($gamePlayer){
+                $gamePlayer->update([
+                    'score' => $player['score'],
+                    'status' => $player['status']
+                ]);
+            }else{
+                return response('Failed', 401);
+            }
+        }
     }
 }
