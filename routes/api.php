@@ -46,4 +46,7 @@ Route::post('/GetGameInfo', 'Api\GameController@GetGameInfo');
 Route::post('/CheckIfGameExists', 'Api\GameController@CheckIfGameExists');
 Route::post('/GetGameStatus', 'Api\GameController@GetGameStatus');
 Route::post('/UpdateGame', 'Api\GameController@UpdateGame');
+Route::post('/DeleteGame', 'Api\GameController@DeleteGame');
+Route::post('/GetGameById', 'Api\GameController@GetGameById');
+Route::post('/GetAllGamePlayersForUser', 'Api\GameController@GetAllGamePlayersForUser');
 

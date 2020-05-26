@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use auth;
 use App\Models\Game;
 use App\Models\User;
 use App\Models\GamePlayer;
@@ -18,6 +19,7 @@ class GameController extends Controller
 
         $game = Game::create([
             'gameId' => $gameId,
+            'creatorId' => $request['loggedInId'],
             'limit' => $request['limit'],
         ]);
 
@@ -74,11 +76,32 @@ class GameController extends Controller
             if($gamePlayer){
                 $gamePlayer->update([
                     'score' => $player['score'],
-                    'status' => $player['status']
+                    'status' => $player['status'],
+                    'timesKnocked' => $player['timesKnocked'],
+                    'roundsWon' => $player['roundsWon'],
+                    'roundsWonWithJack' => $player['roundsWonWithJack'],
                 ]);
             }else{
                 return response('Failed', 401);
             }
         }
+    }
+
+    public function DeleteGame(Request $request){
+        $game = Game::where('gameId', '=', $request['gameId'])->first();
+        if($game) $game->delete();
+
+        $players = GamePlayer::where('gameId', '=', $request['gameId'])->get();
+        foreach($players as $player){
+            $player->delete();
+        }   
+    }
+
+    public function GetGameById(Request $request){
+        return Game::where('gameId',  '=', $request['gameId'])->first();
+    }
+
+    public function GetAllGamePlayersForUser(Request $request){
+        return GamePlayer::where('userId',  '=', $request['userId'])->get()->toArray();
     }
 }

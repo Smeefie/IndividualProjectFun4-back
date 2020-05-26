@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    protected $fillable = ['gameId', 'limit', 'round', 'status'];
+    protected $fillable = ['gameId', 'creatorId', 'limit', 'round', 'status'];
 }
