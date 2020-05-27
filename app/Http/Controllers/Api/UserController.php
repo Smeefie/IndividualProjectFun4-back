@@ -16,14 +16,14 @@ class UserController extends Controller
             ->toArray();            
     }
 
-    public function GetUserById(Request $request){
-        return User::where('id', '=', $request['id'])
+    public function GetUserById($userId){
+        return User::where('id', '=', $userId)
             ->first()
             ->toArray();                    
     }
 
-    public function GetUserByEmail(Request $request){
-        return User::where('email', '=', $request['email'])
+    public function GetUserByEmail($email){
+        return User::where('email', '=', $email)
             ->first()
             ->toArray();      
     }

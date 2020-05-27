@@ -22,12 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //AUTHENTICATION
 Route::post('/Register', 'Api\AuthController@Register');
 Route::post('/Login', 'Api\AuthController@Login');
-Route::get('/Logout', 'Api\AuthController@Logout');
+Route::post('/Logout', 'Api\AuthController@Logout');
 
 //USERS
-Route::post('/GetAllUsers', 'Api\UserController@GetAllUsers');
-Route::post('/GetUserById', 'Api\UserController@GetUserById');
-Route::post('/GetUserByEmail', 'Api\UserController@GetUserByEmail');
+Route::get('/GetAllUsers', 'Api\UserController@GetAllUsers');
+Route::get('/GetUserById/{userId}', 'Api\UserController@GetUserById');
+Route::get('/GetUserByEmail/{email}', 'Api\UserController@GetUserByEmail');
 
 //FRIENDS
 Route::post('/AddFriend', 'Api\UserController@AddFriend');
