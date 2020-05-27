@@ -46,7 +46,15 @@ Route::post('/GetGameInfo', 'Api\GameController@GetGameInfo');
 Route::post('/CheckIfGameExists', 'Api\GameController@CheckIfGameExists');
 Route::post('/GetGameStatus', 'Api\GameController@GetGameStatus');
 Route::post('/UpdateGame', 'Api\GameController@UpdateGame');
-Route::post('/DeleteGame', 'Api\GameController@DeleteGame');
+Route::post('/UpdateRounds', 'Api\GameController@UpdateRounds');
+Route::delete('/DeleteGame/{gameId}', 'Api\GameController@DeleteGame');
 Route::post('/GetGameById', 'Api\GameController@GetGameById');
+Route::post('/GetGameByIdArray', 'Api\GameController@GetGameByIdArray');
 Route::post('/GetAllGamePlayersForUser', 'Api\GameController@GetAllGamePlayersForUser');
+
+//MATCH HISTORY
+Route::get('/GetAllGamesByUserId/{userId}', 'Api\HistoryController@GetAllGamesByUserId');
+Route::get('/GetAllRoundsByGameId/{gameId}', 'Api\HistoryController@GetAllRoundsByGameId');
+Route::get('/GetAllRoundPlayersByRoundId/{roundId}', 'Api\HistoryController@GetAllRoundPlayersByRoundId');
+Route::get('/GetMatchDetails/{gameId}', 'Api\HistoryController@GetMatchDetails');
 

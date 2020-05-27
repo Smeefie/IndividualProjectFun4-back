@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use auth;
 use App\Models\Game;
 use App\Models\User;
+use App\Models\Round;
 use App\Models\GamePlayer;
+use App\Models\RoundPlayer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -65,7 +67,7 @@ class GameController extends Controller
         $game = Game::where('gameId', '=', $request['gameId'])->first();
         $game->update([
             'status' => $request['status'],
-            'round' => $request['round']
+            'round' => $request['round'],
         ]);
 
         foreach($request['players'] as $player){
@@ -84,21 +86,102 @@ class GameController extends Controller
             }else{
                 return response('Failed', 401);
             }
-        }
+        }      
     }
 
-    public function DeleteGame(Request $request){
-        $game = Game::where('gameId', '=', $request['gameId'])->first();
+    public function UpdateRounds(Request $request){
+        $roundsObject = $request['roundObject'];       
+        $roundInfo = $roundsObject['roundInfo']; 
+        $playerInfo = $roundsObject['playerInfo'];
+        $gameLimit = Game::where('gameId', '=', $request['gameId'])->first()['limit'];
+        $loserCount = 0;
+
+        if(Round::where('gameId', '=', $request['gameId'])->where('roundNr', '=', $roundInfo['roundNr'])->exists())
+        {
+            return response('input exists', 401);
+        }
+
+        $round = Round::create([
+            'gameId' => $request['gameId'],
+            'roundNr' => $roundInfo['roundNr']
+        ]);
+        if(!$round) return response('Failed', 401);
+
+        for($i = 0; $i < count($playerInfo); $i++){
+            $forPlayer = $playerInfo[$i];
+            if($request['winner'] != $forPlayer['id'] && $forPlayer['status'] == 0){
+                $playerInfo[$i]['score'] = $forPlayer['score'] + (1 + $request['withJack'] + $playerInfo[$i]['knocked']);
+                $playerInfo[$i]['status'] = $playerInfo[$i]['score'] >= $gameLimit ? 1 : 0;
+            }
+        }      
+        
+        for($i = 0; $i < count($playerInfo); $i++){      
+            $forPlayer = $playerInfo[$i];
+            if($forPlayer['status'] == 1) $loserCount++;            
+        }
+
+        if($loserCount == count($playerInfo) - 1){
+            for($i = 0; $i < count($playerInfo); $i++){           
+                $forPlayer = $playerInfo[$i];
+                if($forPlayer['status'] == 0)
+                {
+                    $playerInfo[$i]['status'] = 2;
+                    break;
+                } 
+                            
+            }
+        }
+
+        foreach($playerInfo as $roundPlayer){           
+            $gamePlayer = RoundPlayer::create([
+                'roundId' => Round::where('gameId', '=', $request['gameId'])
+                    ->where('roundNr', '=', $roundInfo['roundNr'])
+                    ->first()['id'],
+                'userId' => $roundPlayer['id'],
+                'score' => $roundPlayer['score'],
+                'withJack' => ($request['winner'] == $roundPlayer['id']) && $request['withJack'] ? 1 : 0,
+                'timesKnocked' => $roundPlayer['knocked'],
+                'status' => $roundPlayer['status'],
+                'roundStatus' => $request['winner'] == $roundPlayer['id'] ? 1 : 0
+            ]);
+            if(!$gamePlayer) return response('Failed', 401);
+        } 
+        
+        return response($playerInfo);
+    }
+
+    public function DeleteGame($gameId){
+        $game = Game::where('gameId', '=', $gameId)->first();
         if($game) $game->delete();
 
-        $players = GamePlayer::where('gameId', '=', $request['gameId'])->get();
+        $players = GamePlayer::where('gameId', '=', $gameId)->get();
         foreach($players as $player){
             $player->delete();
-        }   
+        } 
+        
+        $rounds = Round::where('gameId', '=', $gameId)->get();
+        foreach($rounds as $round){
+            $roundPlayers = RoundPlayer::where('roundId', '=', $round['id'])->get();
+            foreach($roundPlayers as $roundPlayer){
+                $roundPlayer->delete();
+            }
+
+            $round->delete();
+        }
+        
     }
 
     public function GetGameById(Request $request){
         return Game::where('gameId',  '=', $request['gameId'])->first();
+    }
+
+    public function GetGameByIdArray(Request $request){
+        $gameArray = array();
+        foreach($request['gameIdArray'] as $gameId){
+            array_push($gameArray, Game::where('gameId',  '=', $gameId)->first());
+        }
+        
+        return $gameArray;
     }
 
     public function GetAllGamePlayersForUser(Request $request){
