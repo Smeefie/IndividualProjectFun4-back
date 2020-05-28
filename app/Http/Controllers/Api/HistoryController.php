@@ -12,8 +12,8 @@ use App\Http\Controllers\Controller;
 
 class HistoryController extends Controller
 {
-    public function GetAllGamesByUserId($userId){
-        $gameIdArray = GamePlayer::where('userId', '=', $userId)->pluck('gameId')->toArray();
+    public function GetAllGamesByUserId(Request $request){
+        $gameIdArray = GamePlayer::where('userId', '=', $request['userId'])->pluck('gameId')->toArray();
         $gameArray = array();
         foreach($gameIdArray as $gameId){
             array_push($gameArray, Game::where('gameId', '=', $gameId)->first());
