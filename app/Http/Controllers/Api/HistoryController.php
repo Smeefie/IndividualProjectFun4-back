@@ -29,8 +29,8 @@ class HistoryController extends Controller
         return RoundPlayer::where('roundId', '=', $roundId)->get()->toArray();
     }
 
-    public function GetMatchDetails($gameId){
-        $rounds = Round::where('gameId', '=', $gameId)->get()->toArray();
+    public function GetMatchDetails(Request $request){
+        $rounds = Round::where('gameId', '=', $request['gameId'])->get()->toArray();
         $matchDetails = array();
         $roundNames = array();
         foreach($rounds as $round){

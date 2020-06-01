@@ -155,19 +155,19 @@ class GameController extends Controller
         return response($playerInfo);
     }
 
-    public function DeleteGame($gameId)
+    public function DeleteGame(Request $request)
     {
-        $game = Game::where('gameId', '=', $gameId)->first();
+        $game = Game::where('gameId', '=', $request['gameId'])->first();
         if ($game) {
             $game->delete();
         }
 
-        $players = GamePlayer::where('gameId', '=', $gameId)->get();
+        $players = GamePlayer::where('gameId', '=', $request['gameId'])->get();
         foreach ($players as $player) {
             $player->delete();
         }
 
-        $rounds = Round::where('gameId', '=', $gameId)->get();
+        $rounds = Round::where('gameId', '=', $request['gameId'])->get();
         foreach ($rounds as $round) {
             $roundPlayers = RoundPlayer::where('roundId', '=', $round['id'])->get();
             foreach ($roundPlayers as $roundPlayer) {
