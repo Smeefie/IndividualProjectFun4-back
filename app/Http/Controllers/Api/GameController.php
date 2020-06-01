@@ -20,7 +20,7 @@ class GameController extends Controller
 
         $game = Game::create([
             'gameId' => $gameId,
-            'creatorId' => $request['loggedInId'],
+            'creatorId' => $request['creatorId'],
             'limit' => $request['limit'],
         ]);
 
@@ -46,7 +46,7 @@ class GameController extends Controller
 
     public function CheckIfGameExists(Request $request)
     {
-        return Game::where('gameId', '=', $request['gameId'])->exists() ? 1 : 0;
+        return Game::where('gameId', '=', $request['gameId'])->exists() ? true : false;
     }
 
     public function GetGameStatus(Request $request)
