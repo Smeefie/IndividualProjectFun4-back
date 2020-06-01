@@ -12,8 +12,8 @@ use App\Http\Controllers\Controller;
 
 class HistoryController extends Controller
 {
-    public function GetAllGamesByUserId($userId){
-        $gameIdArray = GamePlayer::where('userId', '=', $userId)->pluck('gameId')->toArray();
+    public function GetAllGamesByUserId(Request $request){
+        $gameIdArray = GamePlayer::where('userId', '=', $request['userId'])->pluck('gameId')->toArray();
         $gameArray = array();
         foreach($gameIdArray as $gameId){
             array_push($gameArray, Game::where('gameId', '=', $gameId)->first());
@@ -29,8 +29,8 @@ class HistoryController extends Controller
         return RoundPlayer::where('roundId', '=', $roundId)->get()->toArray();
     }
 
-    public function GetMatchDetails($gameId){
-        $rounds = Round::where('gameId', '=', $gameId)->get()->toArray();
+    public function GetMatchDetails(Request $request){
+        $rounds = Round::where('gameId', '=', $request['gameId'])->get()->toArray();
         $matchDetails = array();
         $roundNames = array();
         foreach($rounds as $round){

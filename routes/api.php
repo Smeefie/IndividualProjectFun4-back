@@ -19,42 +19,58 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//=========================================================================================
 //AUTHENTICATION
+//=========================================================================================
 Route::post('/Register', 'Api\AuthController@Register');
 Route::post('/Login', 'Api\AuthController@Login');
-Route::get('/Logout', 'Api\AuthController@Logout');
+Route::post('/Logout', 'Api\AuthController@Logout');
 
+//=========================================================================================
 //USERS
-Route::post('/GetAllUsers', 'Api\UserController@GetAllUsers');
-Route::post('/GetUserById', 'Api\UserController@GetUserById');
-Route::post('/GetUserByEmail', 'Api\UserController@GetUserByEmail');
+//=========================================================================================
+Route::get('/GetAllUsers', 'Api\UserController@GetAllUsers');
+Route::get('/GetUserById', 'Api\UserController@GetUserById');
+Route::get('/GetUserByEmail', 'Api\UserController@GetUserByEmail');
+Route::get('/GetAllUsersNotFriends', 'Api\UserController@GetAllUsersNotFriends');
 
-//FRIENDS
+//=========================================================================================
+///FRIENDS
+//=========================================================================================
+//GETTERS
+Route::get('/GetAllFriends', 'Api\UserController@GetAllFriends');
+Route::get('/GetAllFriendRequests', 'Api\UserController@GetAllFriendRequests');
+Route::get('/GetFriendRequest', 'Api\UserController@GetFriendRequest');
+//SETTERS
 Route::post('/AddFriend', 'Api\UserController@AddFriend');
 Route::post('/AcceptFriend', 'Api\UserController@AcceptFriend');
-Route::post('/DeclineFriend', 'Api\UserController@DeclineFriend');
-Route::post('/RemoveFriend', 'Api\UserController@RemoveFriend');
-Route::post('/GetAllUsersNotFriends', 'Api\UserController@GetAllUsersNotFriends');
-Route::post('/GetAllFriends', 'Api\UserController@GetAllFriends');
-Route::post('/GetAllFriendRequests', 'Api\UserController@GetAllFriendRequests');
-Route::post('/GetFriendRequest', 'Api\UserController@GetFriendRequest');
+//DELETE
+Route::delete('/DeclineFriend', 'Api\UserController@DeclineFriend');
+Route::delete('/RemoveFriend', 'Api\UserController@RemoveFriend');
 
+//=========================================================================================
 //GAME
+//=========================================================================================
+//GETTERS
+Route::get('/GetAllGamePlayers', 'Api\GameController@GetAllGamePlayers');
+Route::get('/GetGameInfo', 'Api\GameController@GetGameInfo');
+Route::get('/GetGameStatus', 'Api\GameController@GetGameStatus');
+Route::get('/GetGameById', 'Api\GameController@GetGameById');
+Route::get('/GetGameByIdArray', 'Api\GameController@GetGameByIdArray');
+Route::get('/GetAllGamePlayersForUser', 'Api\GameController@GetAllGamePlayersForUser');
+Route::get('/CheckIfGameExists', 'Api\GameController@CheckIfGameExists');
+//SETTERS
 Route::post('/CreateGame', 'Api\GameController@CreateGame');
-Route::post('/GetAllGamePlayers', 'Api\GameController@GetAllGamePlayers');
-Route::post('/GetGameInfo', 'Api\GameController@GetGameInfo');
-Route::post('/CheckIfGameExists', 'Api\GameController@CheckIfGameExists');
-Route::post('/GetGameStatus', 'Api\GameController@GetGameStatus');
 Route::post('/UpdateGame', 'Api\GameController@UpdateGame');
 Route::post('/UpdateRounds', 'Api\GameController@UpdateRounds');
-Route::delete('/DeleteGame/{gameId}', 'Api\GameController@DeleteGame');
-Route::post('/GetGameById', 'Api\GameController@GetGameById');
-Route::post('/GetGameByIdArray', 'Api\GameController@GetGameByIdArray');
-Route::post('/GetAllGamePlayersForUser', 'Api\GameController@GetAllGamePlayersForUser');
+//DELETE
+Route::delete('/DeleteGame', 'Api\GameController@DeleteGame');
 
+//=========================================================================================
 //MATCH HISTORY
-Route::get('/GetAllGamesByUserId/{userId}', 'Api\HistoryController@GetAllGamesByUserId');
-Route::get('/GetAllRoundsByGameId/{gameId}', 'Api\HistoryController@GetAllRoundsByGameId');
-Route::get('/GetAllRoundPlayersByRoundId/{roundId}', 'Api\HistoryController@GetAllRoundPlayersByRoundId');
-Route::get('/GetMatchDetails/{gameId}', 'Api\HistoryController@GetMatchDetails');
+//=========================================================================================
+Route::get('/GetAllGamesByUserId', 'Api\HistoryController@GetAllGamesByUserId');
+Route::get('/GetAllRoundsByGameId', 'Api\HistoryController@GetAllRoundsByGameId');
+Route::get('/GetAllRoundPlayersByRoundId', 'Api\HistoryController@GetAllRoundPlayersByRoundId');
+Route::get('/GetMatchDetails', 'Api\HistoryController@GetMatchDetails');
 

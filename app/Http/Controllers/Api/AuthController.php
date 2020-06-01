@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -23,7 +24,7 @@ class AuthController extends Controller
 
         $accessToken = $user->createToken('authToken')->accessToken;
 
-        return response(['user' => $user, 'access_token' => $accessToken], 200);
+        return response(['user' => $user, 'accessToken' => $accessToken], 200);
     }
 
     public function Login(Request $request)
@@ -33,13 +34,13 @@ class AuthController extends Controller
             'password'=>'required'
         ]);
 
-        if(!auth()->attempt($loginData)){
+        if(!Auth::attempt($loginData)){
             return response(['message' => 'Invalid Credentials'], 401);         
-        }
+        } 
 
-        $accessToken = auth()->user()->createToken('authToken')->accessToken;
+        $accessToken = Auth::user()->createToken('authToken')->accessToken;
 
-        return response(['user' => auth()->user(), 'access_token' => $accessToken], 200);
+        return response(['user' => Auth::user(), 'accessToken' => $accessToken], 200);
     }
 
     public function Logout(Request $request){
