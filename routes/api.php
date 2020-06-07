@@ -49,7 +49,7 @@ Route::delete('/DeclineFriend', 'Api\UserController@DeclineFriend');
 Route::delete('/RemoveFriend', 'Api\UserController@RemoveFriend');
 
 //=========================================================================================
-//GAME
+//GAMES
 //=========================================================================================
 //GETTERS
 Route::get('/GetAllGamePlayers', 'Api\GameController@GetAllGamePlayers');
